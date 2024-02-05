@@ -35,6 +35,7 @@ const filter_reducer = (state, action) => {
       };
     case WINDOW_RESIZE:
       const { width } = action.payload;
+
       if (width <= 975 && !state.gridView) {
         state.gridView = true;
       }
@@ -63,6 +64,76 @@ const filter_reducer = (state, action) => {
         });
       }
       return { ...state, filteredProducts: tempProducts };
+
+    case UPDATE_FILTERS:
+      const { name, value } = action.payload;
+
+      return { ...state, filters: { ...state.filters, [name]: value } };
+
+    case FILTER_PRODUCTS:
+      const { allProducts } = state;
+      const { text, company, category, altCategory, color, price, shipping } =
+        state.filters;
+      let temp_products = [...allProducts];
+      //filtering
+      // text
+      if (text) {
+        temp_products = temp_products.filter((product) => {
+          return product.name.toLowerCase().startsWith(text);
+        });
+      }
+      //category
+      if (category !== "all") {
+        state.filters.altCategory = state.filters.category;
+        temp_products = temp_products.filter((product) => {
+          return product.category.toLowerCase() === category;
+        });
+      }
+      //altCategory
+      if (altCategory !== "all") {
+        state.filters.category = state.filters.altCategory;
+        temp_products = temp_products.filter((product) => {
+          return product.category.toLowerCase() === altCategory;
+        });
+      }
+      //company
+      if (company !== "all") {
+        temp_products = temp_products.filter((product) => {
+          return product.company.toLowerCase() === company;
+        });
+      }
+      //colors
+      if (color !== "all") {
+        temp_products = temp_products.filter((product) => {
+          return product.colors.find((c) => c === color);
+        });
+      }
+
+      //shipping
+      if (shipping) {
+        temp_products = temp_products.filter((product) => {
+          return product.shipping;
+        });
+      }
+      //price
+      temp_products = temp_products.filter((product) => product.price <= price);
+
+      return { ...state, filteredProducts: temp_products };
+
+    case CLEAR_FILTERS:
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          text: "",
+          company: "all",
+          category: "all",
+          altCategory: "all",
+          color: "all",
+          price: state.filters.maxPrice,
+          shipping: false,
+        },
+      };
     default:
       throw new Error(`No Matching "${action.type}" - action type`);
   }

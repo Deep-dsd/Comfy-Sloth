@@ -206,3 +206,16 @@ p {
 .page {
   min-height: calc(100vh - (20vh + 10rem));
 }
+
+.sticky {
+  position: relative;
+  padding: 0.5rem 0;
+  position: sticky;
+  top: 0.5rem;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.955);
+  /* height: 55px;
+  overflow: hidden; */
+  border-radius: var(--radius);
+  box-shadow: 0 0 5px -2px var(--clr-black);
+}

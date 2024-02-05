@@ -23,6 +23,7 @@ const initialState = {
     text: "",
     company: "all",
     category: "all",
+    altCategory: "all",
     color: "all",
     minPrice: 0,
     maxPrice: 0,
@@ -65,12 +66,41 @@ export const FilterProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    dispatch({ type: FILTER_PRODUCTS });
     dispatch({ type: SORT_PRODUCTS });
-  }, [products, state.sort]);
+  }, [products, state.sort, state.filters]);
 
+  const updateFilters = (e) => {
+    let value = e.target.value;
+    let name = e.target.name;
+    if (name === "category") {
+      value = e.target.textContent;
+    }
+    if (name === "color") {
+      value = e.target.dataset.color;
+    }
+    if (name === "price") {
+      value = Number(value);
+    }
+    if (name === "shipping") {
+      value = e.target.checked;
+    }
+    dispatch({ type: UPDATE_FILTERS, payload: { name, value } });
+  };
+
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
   return (
     <FilterContext.Provider
-      value={{ state, sortingProducts, setGridView, setListView }}
+      value={{
+        state,
+        sortingProducts,
+        setGridView,
+        setListView,
+        updateFilters,
+        clearFilters,
+      }}
     >
       {children}
     </FilterContext.Provider>
