@@ -74,6 +74,8 @@ const filter_reducer = (state, action) => {
       const { allProducts } = state;
       const { text, company, category, altCategory, color, price, shipping } =
         state.filters;
+      let temp_category = category;
+      console.log(altCategory);
       let temp_products = [...allProducts];
       //filtering
       // text
@@ -82,16 +84,23 @@ const filter_reducer = (state, action) => {
           return product.name.toLowerCase().startsWith(text);
         });
       }
+
+      // if (altCategory === "all") {
+      //   state.filters.category = state.filters.altCategory;
+      // }
+      // if (category === "all") {
+      //   state.filters.altCategory = state.filters.category;
+      // }
       //category
       if (category !== "all") {
-        state.filters.altCategory = state.filters.category;
+        // state.filters.altCategory = state.filters.category;
         temp_products = temp_products.filter((product) => {
           return product.category.toLowerCase() === category;
         });
       }
       //altCategory
       if (altCategory !== "all") {
-        state.filters.category = state.filters.altCategory;
+        // state.filters.category = state.filters.altCategory;
         temp_products = temp_products.filter((product) => {
           return product.category.toLowerCase() === altCategory;
         });

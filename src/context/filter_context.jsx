@@ -73,8 +73,13 @@ export const FilterProvider = ({ children }) => {
   const updateFilters = (e) => {
     let value = e.target.value;
     let name = e.target.name;
+
+    if (name === "altCategory") {
+      state.filters.category = value;
+    }
     if (name === "category") {
       value = e.target.textContent;
+      state.filters.altCategory = value;
     }
     if (name === "color") {
       value = e.target.dataset.color;
